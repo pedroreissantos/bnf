@@ -1,0 +1,7 @@
+# echo -n '1&(1|!0)' | python3 -m ebnf exs/logical.ebnf
+expr ::= and or2 ;
+or2  ::= '|' and or2 | ;
+and  ::= not and2 ;
+and2 ::= '&' not and2 | ;
+not  ::= '!' not | lit ;
+lit  ::= '1' | '0' | '(' expr ')' ;

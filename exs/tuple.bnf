@@ -1,0 +1,6 @@
+# echo -n "(12,34,)" | python3 -m bnf exs/tuple.bnf
+<tuple> ::= \( <body> \) | \( \)
+<body>  ::= <elem> <num> | <elem>
+<elem>  ::= <num> , <elem> | <num> ,
+<num>   ::= <dig> <num> | <dig>
+<dig>   ::= [0-9]

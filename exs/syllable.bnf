@@ -1,0 +1,6 @@
+# words made up two syllables, each syllable is a consonant followed by a vowel ou vice-versa.
+# echo -n "does" | python3 -m bnf exs/syllable.bnf
+<word> ::= <syllable> <syllable>
+<syllable> ::= <vowel> <consonant> | <consonant> <vowel>
+<vowel> ::= a | e | i | o | u
+<consonant> ::= b | c | d | f | g | h | j | l | m | n | p | q | r | s | t | v | x | z

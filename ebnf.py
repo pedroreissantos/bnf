@@ -43,7 +43,6 @@ def t_EOL(t):
 	return t
 def t_SET(t):
 	r'\[ \^? ([^\\\]]|\\.)+ \]'
-	print("SET: ", t.value)
 	return t
 # A string containing ignored characters (spaces and tabs)
 t_ignore = ' \t\r\n'
@@ -165,6 +164,7 @@ def parse(gram, nt, data):
 			if not data or data[:n] != j[1]: return False, data
 			data = data[n:]
 			recurs = 0
+			if debug > 1: print('* MATCHED terminal:', j[1])
 		elif j[0] == 'NT':
 			if debug: print('nt', j[1], ':', data)
 			if j[1] not in gram:
@@ -175,12 +175,14 @@ def parse(gram, nt, data):
 			res = fit(gram[j[1]], data)
 			if not res[0]: return False, data
 			data = res[1]
+			if debug > 1: print('* MATCHED non-terminal:', j[1])
 		elif j[0] == '[':
 			if debug: print('set', j[1], ':', data)
 			if not data or not re.match(j[1], data[0]):
 				return False, data
 			data = data[1:]
 			recurs = 0
+			if debug > 1: print('* MATCHED set:', j[1])
 		elif j[0] == '|':
 			if debug: print('alternative', seq(j[1]), '|', seq(j[2]), ':', data)
 			res = fit(j[1], data)
@@ -195,21 +197,25 @@ def parse(gram, nt, data):
 			res = fit(j[2], res[1])
 			if not res[0]: return False, data
 			data = res[1]
+			if debug > 1: print('* MATCHED sequence:', j[1])
 		elif j[0] == '(':
 			if debug: print('group', seq(j[1]), ':', data)
 			res = fit(j[1], data)
 			if not res[0]: return False, data
 			data = res[1]
+			if debug > 1: print('* MATCHED group:', j[1])
 		elif j[0] == '{':
-			if debug: print('opt', seq(j[1]), ':', data)
+			if debug: print('optional', seq(j[1]), ':', data)
 			res = fit(j[1], data)
 			if res[0]: data = res[1]
+			if debug > 1: print('* MATCHED optional:', j[1])
 		elif j[0] == '*':
 			if debug: print('kleen', seq(j[1]), ':', data)
 			while True:
 				res = fit(j[1], data)
 				if not res[0]: break
 				data = res[1]
+			if debug > 1: print('* MATCHED kleen:', j[1])
 		elif j[0] == '+':
 			if debug: print('onemany', seq(j[1]), ':', data)
 			res = fit(j[1], data)
@@ -217,6 +223,7 @@ def parse(gram, nt, data):
 			while res[0]:
 				data = res[1]
 				res = fit(j[1], data)
+			if debug > 1: print('* MATCHED onemany:', j[1])
 		return True, data
 	if debug: print('input: len =', len(data), 'data =', data)
 	if nt not in gram: return False
@@ -262,5 +269,5 @@ def main(argv):
 	exit(0 if ret else 2)
 
 if __name__ == '__main__':
-	if 'DEBUG' in environ: debug = 1
+	if 'DEBUG' in environ: debug = int(environ['DEBUG'])
 	main(argv)
