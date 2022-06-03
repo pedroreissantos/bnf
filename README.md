@@ -4,7 +4,7 @@ BNF syntax:
 ===========
 
 1. non-terminals between `<>`
-2. rules end at newline `\\n`
+2. rules end at newline `\n`
 3. assign with `::=`
 4. operators:
 	* alternative derivations separated by `|`
@@ -30,7 +30,7 @@ Test if an input sequence matches the above grammar with:
 echo -n "(12,34,)" | python3 -m bnf tuple.bnf
 ```
 
-Note: input sequence must not contain a newline (`\\n`) if grammar does not support it (use `echo -n`)
+Note: input sequence must not contain a newline (`\n`) if grammar does not support it (use `echo -n`)
 
 Use the environment `DEBUG=1` for a verbose output:
 
@@ -43,7 +43,7 @@ The BNF compiler uses a greedy LL parser:
 1. no left-recursion
 2. no `a+ a` alike sequences
 3. longest rule first: rule `<X> ::= a | a b`" must be replaced by `<X> ::= a b | a`
-4. special chars `<>(){}[]|+*?:=` each must be quoted with `\\`
+4. special chars `<>(){}[]|+*?:=` each must be quoted with `\`
 
 EBNF syntax:
 ============
