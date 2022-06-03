@@ -8,11 +8,12 @@ with open("README.md", "r") as fh:
 	readme = fh.read()
 
 setuptools.setup(name='bnf', # 'bnf-pkg-peresan',
-	version='1.0.1',
+	version='1.0.2',
 	author='Pedro Reis dos Santos',
 	author_email="reis.santos@tecnico.ulisboa.pt",
 	description="A BNF (Backus-Naur Form) parser and a greedy LL input sequence scanner",
 	long_description=readme,
+	long_description_content_type="text/x-rst",
 	license = 'MIT',
 	url="https://github.com/pedroreissantos/bnf",
 	classifiers=[

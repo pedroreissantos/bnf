@@ -5,6 +5,8 @@ all::
 	python3 setup.py sdist bdist_wheel
 install::
 	python3 -m twine upload --repository $(REP) dist/*
+check::
+	python3 -m twine check dist/*
 test::
 	python3 -m venv $(ENV)
 	source $(ENV)/bin/activate
