@@ -42,7 +42,7 @@ The BNF compiler uses a greedy LL parser:
 
 1. no left-recursion
 2. no `a+ a` alike sequences
-3. longest rule first: rule `<X> ::= a | a b`" must be replaced by `<X> ::= a b | a`
+3. longest rule first: rule `<X> ::= a | a b` must be replaced by `<X> ::= a b | a`
 4. special chars `<>(){}[]|+*?:=` each must be quoted with `\`
 
 EBNF syntax:
