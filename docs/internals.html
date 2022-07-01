@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>BNF (Backus-Naur form) parser</title>
+</head>
+<BODY BGCOLOR="B5BDD6" link=red vlink=green>
+
+<h1>BNF (Backus-Naur form) parser</h1>
+
+<b>
+Pedro Reis dos Santos<br>
+University of Lisboa<br>
+(C)IST, 2022<br>
+</b>
+
+<p>
+<b>bnf-1.0</b>
+<p>
+
+<div class="sectiontoc">
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#high">high-level functions</a></li>
+</ul>
+
+<H2><a name="intro"></a>1. Introduction</H2>
+
+This document aims at providing some insight
+on the eBNF parser developped for the <b>ebnf</b> module.
+The <a href="#high">high-level functions</a> are called externally by the user.
+The other routines are documented to make undestanding of the code smooth and facilitate further changes.
+
+<H2><a name="high"></a>2. High-level BNF functions</H2>
+
+The <a href="#main">main</a> routine is the top level user routine.
+The <a href="#bnf">bnf</a> routine is the actual processing rotine,
+the <a href="parse">parse</a> routine matches the input sequence to a given grammar,
+the <a href="dump">dump</a> routine 
+the <a href="grammar">grammar</a> routines are used to build a grammar from different input formats.
+
+<H3><a name="debug"></a>2.1 Debug</H3>
+
+The <tt>ebnf</tt> package already includes an extensive debug mode to help
+developers.
+A <tt>debug</tt> variable can be set to values ranging from <tt>0</tt>
+produce no debug information, to <tt>5</tt>, the highest debug level.
+<pre>
+pyburg.debug=0 # no debug
+</pre>
+A <tt>debug</tt> value higher than <tt>0</tt> will report errors while
+processing the grammer, no match for start symbol in input processing,
+and print the tree final cost.
+A <tt>debug</tt> value higher than <tt>1</tt> will also print the reduced
+rules and reports a missing <tt>goal</tt> variable or if it unable to produce 
+grammar from the input arguments.
+A <tt>debug</tt> value higher than <tt>2</tt> include labeling information
+about tree node and rules.
+A <tt>debug</tt> value higher than <tt>3</tt> reports costs.
+A <tt>debug</tt> value higher than <tt>4</tt> prints reduce state information and closure setup.
+
+<H3><a name="main"></a>2.2 Main</H3>
+The <tt>main(argv)</tt> function is the high level function called when the
+module is directly invoqued.
+When the <tt>list</tt>, or <tt>tuple</tt>, contains two arguments, the first
+is taken as the grammar filename, and its contents is processed, and the
+second argument is an input data file.
+The rotine processes the input, given the grammar, and exits the process
+with a 0 (zero) code if the input is accept by the grammar, or exits
+the process with a code 2 (two) if the input is rejected by the grammar.
+
+<H3><a name="bnf"></a>2.3 BNF</H3>
+The <tt>bnf(filename, data, debug)</tt> function matches an input <tt>data</tt>
+sequence to a grammar, given the grammar's <tt>filename</tt>.
+The option <tt>debug</tt> parameter activates a multi-level verbose mode.
+<pre>
+def bnf(filename, data, debug=False)
+</pre>
+
+<H3><a name="parse"></a>2.4 parse</H3>
+The <tt>def parse(gram, nt, data)</tt> function matches an input <tt>data</tt>
+sequence to a grammar (<tt>gram</tt>), given a starting nonterminal symbol,
+<tt>nt</tt>.
+When invoqued externaly, the nonterminal should be the grammar's start symbol.
+However, internaly, the routine is recursively invoqued for every potential
+nonterminal, and the input <tt>data</tt> sequence adjusted accordingly.
+The routine uses a global variable <tt>recurs</tt> in order to keep track
+of ilimited recursion and, therefore, is not reentrant.
+<pre>
+def parse(gram, nt, data)
+</pre>
+
+<H3><a name="dump"></a>2.5 dump</H3>
+The <tt>dump(gram, start)</tt> function is a debug routine that prints the
+parsed grammar and start symbol.
+<pre>
+def dump(gram, start)
+</pre>
+
+<H3><a name="grammar"></a>2.6 grammar</H3>
+The <tt>grammar(data)</tt> function builds a grammar structure and
+determines the its start symbol, given its textual description
+<tt>data</tt> as a character string.
+A grammar structure is a python's dictionary where the keys are
+nonterminal symbols as strings and its values are python's lists of
+rules. Each rule is a python's list of terminal and nonterminal symbols,
+tagged by type and represented as strings.
+<pre>
+def grammar(data)
+</pre>
+
+<H2><a name="high"></a>2. High-level eBNF functions</H2>
+
+The <b>eBNF</b> parser uses the same structure as the <b>BNF</b> and
+the routines have the same names.
+The grammar internal representation format is the same, only the
+syntactic sugar is different.
+The module containing the routines is called <tt>ebnf.py</tt>.
+
+</body>
+</html>

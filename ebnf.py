@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # eBNF compiler
-# with a greedy LL parser: no left-recursion, no 'a'+ 'a' alike sequences
-#	greedy implies that rules "<X> ::= a | a b"
+# a LL parser with backtracking: no left-recursion, no 'a'+ 'a' alike sequences
+#	backtracking implies that rules "<X> ::= a | a b"
 #	must be replaced by "<X> ::= a b | a" (longest fule first)
 #
 # Syntax: terminals between "", assign with ::=, rules end at ;

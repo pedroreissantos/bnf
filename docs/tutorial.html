@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>Language description with eBNF</title>
+</head>
+<BODY BGCOLOR="B5BDD6" link=red vlink=green>
+
+<h1>Language description with BNF (and eBNF)</h1>
+
+<b>
+Pedro Reis dos Santos<br>
+Universidade de Lisboa<br>
+(C)IST, 2022<br>
+</b>
+
+<div class="sectiontoc">
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#over">Overview</a></li>
+<li><a href="#parse">Parsing language descriptions</a></li>
+<li><a href="#match">Matching input sequences</a></li>
+</ul>
+
+<H2><a name="intro"></a>1. Introduction</H2>
+
+The <pre>BNF</pre> package provides two modules (<pre>bnf</pre> and
+<pre>ebnf</pre>) for grammar descriptions in the <b>BNF</b> and <b>eBNF</b>
+format, with the same operators.
+The two descriptions are very similar, and a quoting scheme was introduced
+in order to allow the definition of any input sequence.
+
+The grammar description can be parsed, for integrity check, and then
+input sequences can be tested to check whether they conform to the
+given grammar, or not.
+The processing of each input sequence provides a boolean result
+(<pre>True</pre> or <pre>False</pre>).
+
+The input sequence matching is performed by a simple LL parser with
+backtracking.
+This implies that not every grammar is accepted, but there is an
+equivalent LL grammar that can be used to describe the target language.
+The user must adapt its initial grammar in order to be able to
+use this tool.
+
+<H2><a name="over"></a>2. Overview</H2>
+
+BNF syntax:
+<ol>
+<li> non-terminals between <pre>&lt;&gt;</pre> </li>
+<li> rules end at newline <pre>\n</pre> </li>
+<li> assign with <pre>::=</pre> </li>
+<li> operators:
+<ul>
+	<li> alternative derivations separated by <pre>|</pre> </li>
+	<li> group items between <pre>()</pre> </li>
+	<li> optional items between <pre>{}</pre> or with postfix <pre>?</pre> operator </li>
+	<li> zero or more repetitions with postfix <pre>*</pre> operator </li>
+	<li> one or more repetitions with postfix <pre>+</pre> operator </li>
+</ul> </li>
+<li> set of terminal values between <pre>[]</pre>: in set <pre>[aeiou]</pre>, not in set <pre>[^aeiou]</pre> or ranges <pre>[a-z]</pre> </li>
+</ol>
+
+The BNF compiler uses a LL parser with backtracking:
+
+<ol>
+<li> no left-recursion: <pre>&lt;X&gt; ::= &lt;X&gt; ...</pre>  </li>
+<li> no <pre>a+ a</pre> alike sequences </li>
+<li> longest rule first: rule <pre>&lt;X&gt; ::= a | a b</pre> must be replaced by <pre>&lt;X&gt; ::= a b | a</pre> </li>
+<li> special chars <pre>&lt;&gt;(){}[]|+*?:=</pre> each must be quoted with <pre>\</pre> </li>
+</ol>
+
+eBNF syntax:
+<ol>
+<li> terminal symbols must be quoted between <pre>""</pre>: <pre>"if"</pre> </li>
+<li> rules end with <pre>;</pre> not a newline </li>
+</ol>
+
+<H2><a name="parse"></a>3. Parsing language descriptions</H2>
+
+Grammar example in BNF for a python tuple of integer literals (<pre>tuple.bnf</pre>):
+
+<pre>
+&lt;tuple&gt; ::= \( &lt;body&gt; \) | \( \)
+&lt;body&gt;  ::= &lt;elem&gt; &lt;num&gt; | &lt;elem&gt;
+&lt;elem&gt;  ::= &lt;num&gt; , &lt;elem&gt; | &lt;num&gt; ,
+&lt;num&gt;   ::= &lt;dig&gt; &lt;num&gt; | &lt;dig&gt;
+&lt;dig&gt;   ::= [0-9]
+</pre>
+
+The tuple example in eBNF becomes (<pre>tuple.ebnf</pre>):
+
+<pre>
+tuple ::= '(' body ')' | '(' ')' ;
+body  ::= elem num | elem ;
+elem  ::= num ',' elem | num ',' ;
+num   ::= dig num | dig ;
+dig   ::= [0-9] ;
+</pre>
+
+<H2><a name="match"></a>4. Matching input sequences</H2>
+
+Test if an input sequence matches the above grammar with:
+
+<pre>
+echo -n "(12,34,)" | python3 -m bnf tuple.bnf
+</pre>
+
+The printed result should be <pre>True</pre> or <pre>False</pre> whether
+the input sequence is accepted by the grammar, or not, respectively.
+
+If the input sequence is store in file (<pre>sequence.txt</pre>), use it as a second argument:
+<pre>
+python3 -m bnf tuple.bnf sequence.txt
+</pre>
+
+Note: input sequence must not contain a newline (<pre>\n</pre>) if grammar does not support it (use <pre>echo -n</pre>)
+
+When no arguments are given, the grammar is read from the terminal and,
+after a first EOF (End-of-file: <pre>ctrl-D</pre> in unix or <pre>ctrl-Z</pre> in windows),
+the input sequence:
+<pre>
+prompt$ python3 -m bnf
+<x> ::= a b+ c
+input sequence: end with EOF (^D) or use ^D^D to end with no EOL
+abbc
+True
+prompt$
+</pre>
+
+Use the environment <pre>DEBUG=1</pre> for a verbose output
+(<pre>DEBUG=2</pre> for a more verbose output):
+
+<pre>
+echo -n "(12,34,)" | DEBUG=1 python3 -m bnf tuple.bnf
+</pre>
+
+</body>
+</html>

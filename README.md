@@ -1,4 +1,4 @@
-A BNF (Backus-Naur Form) parser and a greedy LL input sequence scanner
+A BNF (Backus-Naur Form) parser and a LL input sequence scanner with backtracking
 
 BNF syntax:
 ===========
@@ -12,9 +12,16 @@ BNF syntax:
 	* optional items between `{}` or with postfix `?` operator
 	* zero or more repetitions with postfix `*` operator
 	* one or more repetitions with postfix `+` operator
-5. set of terminal values between `[]`, not in set `[^...]` or ranges: `[a-z]`
+5. set of terminal values between `[]`: in set `[aeiou]`, not in set `[^aeiou]` or ranges `[a-z]`
 
-Grammar example for a python tuple of integer literals:
+The BNF compiler uses a LL parser with backtracking:
+
+1. no left-recursion: `<X> :== <X> ...`
+2. no `a+ a` alike sequences
+3. longest rule first: rule `<X> ::= a | a b` must be replaced by `<X> ::= a b | a`
+4. special chars `\<>(){}[]|+*?:=` each must be quoted with `\`
+
+Grammar example for a python tuple of integer literals (`tuple.bnf`):
 
 ```bnf
 <tuple> ::= \( <body> \) | \( \)
@@ -30,29 +37,27 @@ Test if an input sequence matches the above grammar with:
 echo -n "(12,34,)" | python3 -m bnf tuple.bnf
 ```
 
+The printed result should be `True` or `False` whether
+the input sequence is accepted by the grammar, or not, respectively.
+
 Note: input sequence must not contain a newline (`\n`) if grammar does not support it (use `echo -n`)
 
-Use the environment `DEBUG=1` for a verbose output:
+Use the environment `DEBUG=1` for a verbose output
+(`DEBUG=2` for a more verbose output):
 
 ```
 echo -n "(12,34,)" | DEBUG=1 python3 -m bnf tuple.bnf
 ```
 
-The BNF compiler uses a greedy LL parser:
-
-1. no left-recursion
-2. no `a+ a` alike sequences
-3. longest rule first: rule `<X> ::= a | a b` must be replaced by `<X> ::= a b | a`
-4. special chars `<>(){}[]|+*?:=` each must be quoted with `\`
-
 EBNF syntax:
 ============
 
-1. terminal symbols must be quoted between `""`
-2. rules end with `;`
+1. terminal symbols must be quoted between `""`: `"if"`
+2. rules end with `;` not a newline
 
 remaining rules are the same as for BNF syntax.
-The tuple example in ebnf becomes:
+
+The tuple example in eBNF becomes (`tuple.ebnf`):
 
 ```bnf
 tuple ::= '(' body ')' | '(' ')' ;
@@ -76,10 +81,10 @@ The bnf/ package includes:
 
 Documentation in the docs/ directory:
 
-* tutorial.html: a complete example
+* tutorial.html: an introdution guide
 * internals.html: bnf/ebnf routine description
 
-Code generation examples:
+Code examples:
 
 * exs/: some demonstration examples
 
