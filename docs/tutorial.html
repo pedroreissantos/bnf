@@ -22,8 +22,8 @@ Universidade de Lisboa<br>
 
 <H2><a name="intro"></a>1. Introduction</H2>
 
-The <pre>BNF</pre> package provides two modules (<pre>bnf</pre> and
-<pre>ebnf</pre>) for grammar descriptions in the <b>BNF</b> and <b>eBNF</b>
+The <tt>BNF</tt> package provides two modules (<tt>bnf</tt> and
+<tt>ebnf</tt>) for grammar descriptions in the <b>BNF</b> and <b>eBNF</b>
 format, with the same operators.
 The two descriptions are very similar, and a quoting scheme was introduced
 in order to allow the definition of any input sequence.
@@ -32,7 +32,7 @@ The grammar description can be parsed, for integrity check, and then
 input sequences can be tested to check whether they conform to the
 given grammar, or not.
 The processing of each input sequence provides a boolean result
-(<pre>True</pre> or <pre>False</pre>).
+(<tt>True</tt> or <tt>False</tt>).
 
 The input sequence matching is performed by a simple LL parser with
 backtracking.
@@ -45,38 +45,38 @@ use this tool.
 
 BNF syntax:
 <ol>
-<li> non-terminals between <pre>&lt;&gt;</pre> </li>
-<li> rules end at newline <pre>\n</pre> </li>
-<li> assign with <pre>::=</pre> </li>
+<li> non-terminals between <tt>&lt;&gt;</tt> </li>
+<li> rules end at newline <tt>\n</tt> </li>
+<li> assign with <tt>::=</tt> </li>
 <li> operators:
 <ul>
-	<li> alternative derivations separated by <pre>|</pre> </li>
-	<li> group items between <pre>()</pre> </li>
-	<li> optional items between <pre>{}</pre> or with postfix <pre>?</pre> operator </li>
-	<li> zero or more repetitions with postfix <pre>*</pre> operator </li>
-	<li> one or more repetitions with postfix <pre>+</pre> operator </li>
+	<li> alternative derivations separated by <tt>|</tt> </li>
+	<li> group items between <tt>()</tt> </li>
+	<li> optional items between <tt>{}</tt> or with postfix <tt>?</tt> operator </li>
+	<li> zero or more repetitions with postfix <tt>*</tt> operator </li>
+	<li> one or more repetitions with postfix <tt>+</tt> operator </li>
 </ul> </li>
-<li> set of terminal values between <pre>[]</pre>: in set <pre>[aeiou]</pre>, not in set <pre>[^aeiou]</pre> or ranges <pre>[a-z]</pre> </li>
+<li> set of terminal values between <tt>[]</tt>: in set <tt>[aeiou]</tt>, not in set <tt>[^aeiou]</tt> or ranges <tt>[a-z]</tt> </li>
 </ol>
 
 The BNF compiler uses a LL parser with backtracking:
 
 <ol>
-<li> no left-recursion: <pre>&lt;X&gt; ::= &lt;X&gt; ...</pre>  </li>
-<li> no <pre>a+ a</pre> alike sequences </li>
-<li> longest rule first: rule <pre>&lt;X&gt; ::= a | a b</pre> must be replaced by <pre>&lt;X&gt; ::= a b | a</pre> </li>
-<li> special chars <pre>&lt;&gt;(){}[]|+*?:=</pre> each must be quoted with <pre>\</pre> </li>
+<li> no left-recursion: <tt>&lt;X&gt; ::= &lt;X&gt; ...</tt>  </li>
+<li> no <tt>a+ a</tt> alike sequences </li>
+<li> longest rule first: rule <tt>&lt;X&gt; ::= a | a b</tt> must be replaced by <tt>&lt;X&gt; ::= a b | a</tt> </li>
+<li> special chars <tt>&lt;&gt;(){}[]|+*?:=</tt> each must be quoted with <tt>\</tt> </li>
 </ol>
 
 eBNF syntax:
 <ol>
-<li> terminal symbols must be quoted between <pre>""</pre>: <pre>"if"</pre> </li>
-<li> rules end with <pre>;</pre> not a newline </li>
+<li> terminal symbols must be quoted between <tt>""</tt>: <tt>"if"</tt> </li>
+<li> rules end with <tt>;</tt> not a newline </li>
 </ol>
 
 <H2><a name="parse"></a>3. Parsing language descriptions</H2>
 
-Grammar example in BNF for a python tuple of integer literals (<pre>tuple.bnf</pre>):
+Grammar example in BNF for a python tuple of integer literals (<tt>tuple.bnf</tt>):
 
 <pre>
 &lt;tuple&gt; ::= \( &lt;body&gt; \) | \( \)
@@ -86,7 +86,7 @@ Grammar example in BNF for a python tuple of integer literals (<pre>tuple.bnf</p
 &lt;dig&gt;   ::= [0-9]
 </pre>
 
-The tuple example in eBNF becomes (<pre>tuple.ebnf</pre>):
+The tuple example in eBNF becomes (<tt>tuple.ebnf</tt>):
 
 <pre>
 tuple ::= '(' body ')' | '(' ')' ;
@@ -104,18 +104,18 @@ Test if an input sequence matches the above grammar with:
 echo -n "(12,34,)" | python3 -m bnf tuple.bnf
 </pre>
 
-The printed result should be <pre>True</pre> or <pre>False</pre> whether
+The printed result should be <tt>True</tt> or <tt>False</tt> whether
 the input sequence is accepted by the grammar, or not, respectively.
 
-If the input sequence is store in file (<pre>sequence.txt</pre>), use it as a second argument:
+If the input sequence is store in file (<tt>sequence.txt</tt>), use it as a second argument:
 <pre>
 python3 -m bnf tuple.bnf sequence.txt
 </pre>
 
-Note: input sequence must not contain a newline (<pre>\n</pre>) if grammar does not support it (use <pre>echo -n</pre>)
+Note: input sequence must not contain a newline (<tt>\n</tt>) if grammar does not support it (use <tt>echo -n</tt>)
 
 When no arguments are given, the grammar is read from the terminal and,
-after a first EOF (End-of-file: <pre>ctrl-D</pre> in unix or <pre>ctrl-Z</pre> in windows),
+after a first EOF (End-of-file: <tt>ctrl-D</tt> in unix or <tt>ctrl-Z</tt> in windows),
 the input sequence:
 <pre>
 prompt$ python3 -m bnf
@@ -126,8 +126,8 @@ True
 prompt$
 </pre>
 
-Use the environment <pre>DEBUG=1</pre> for a verbose output
-(<pre>DEBUG=2</pre> for a more verbose output):
+Use the environment <tt>DEBUG=1</tt> for a verbose output
+(<tt>DEBUG=2</tt> for a more verbose output):
 
 <pre>
 echo -n "(12,34,)" | DEBUG=1 python3 -m bnf tuple.bnf

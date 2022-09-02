@@ -40,10 +40,11 @@ def t_ESC(t):
 	return t
 def t_COMMENT(t):
 	r'\#.*\n'
+	t.lexer.lineno += 1
 	pass # No return value. Token discarded
 def t_EOL(t):
 	r'\n'
-	t.lexer.lineno += len(t.value)
+	t.lexer.lineno += 1
 	return t
 def t_SET(t):
 	r'\[ \^? ([^\\\]]|\\.)+ \]'

@@ -24,7 +24,7 @@ except:
 # -------------- SCAN ----------------
 import ply.lex as lex
 reserved = { }
-tokens = [ 'NT', 'TERM', 'ASSIGN', 'EOL', 'SET' ]
+tokens = [ 'NT', 'TERM', 'ASSIGN', 'EOL', 'SET', ]
 literals = '{}+*|()[]'
 t_ASSIGN = r'::='
 def t_NT(t):
@@ -36,16 +36,20 @@ def t_TERM(t):
 	return t
 def t_COMMENT(t):
 	r'\#.*\n'
+	t.lexer.lineno += 1
+	pass # No return value. Token discarded
+def t_newline(t):
+	r'\n'
+	t.lexer.lineno += 1
 	pass # No return value. Token discarded
 def t_EOL(t):
 	r';'
-	t.lexer.lineno += len(t.value)
 	return t
 def t_SET(t):
 	r'\[ \^? ([^\\\]]|\\.)+ \]'
 	return t
 # A string containing ignored characters (spaces and tabs)
-t_ignore = ' \t\r\n'
+t_ignore = ' \t\r'
 # Error handling rule
 def t_error(t):
 	print('line', t.lineno, ": illegal character '%s'" % t.value[0])
