@@ -76,23 +76,27 @@ def bnf(filename, data, debug=False)
 </pre>
 
 <H3><a name="parse"></a>2.4 parse</H3>
-The <tt>def parse(gram, nt, data)</tt> function matches an input <tt>data</tt>
+The <tt>def parse(data, gram, nterm)</tt> function matches an input <tt>data</tt>
 sequence to a grammar (<tt>gram</tt>), given a starting nonterminal symbol,
-<tt>nt</tt>.
-When invoqued externaly, the nonterminal should be the grammar's start symbol.
+<tt>nterm</tt>.
+When invoqued externaly, the nonterminal (<tt>nterm</tt>) should be the grammar's start symbol.
 However, internaly, the routine is recursively invoqued for every potential
 nonterminal, and the input <tt>data</tt> sequence adjusted accordingly.
+If no <tt>gram</tt> or <tt>nterm</tt> are given, the previous values returned from
+the <tt>bnf</tt> are used.
 The routine uses a global variable <tt>recurs</tt> in order to keep track
 of ilimited recursion and, therefore, is not reentrant.
 <pre>
-def parse(gram, nt, data)
+def parse(data, gram=None, nterm=None)
 </pre>
 
 <H3><a name="dump"></a>2.5 dump</H3>
 The <tt>dump(gram, start)</tt> function is a debug routine that prints the
 parsed grammar and start symbol.
+If no <tt>gram</tt> or <tt>nterm</tt> are given, the previous values returned from
+the <tt>bnf</tt> are used.
 <pre>
-def dump(gram, start)
+def dump(gram=None, start=None)
 </pre>
 
 <H3><a name="grammar"></a>2.6 grammar</H3>

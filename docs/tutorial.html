@@ -101,7 +101,7 @@ dig   ::= [0-9] ;
 Test if an input sequence matches the above grammar with:
 
 <pre>
-echo -n "(12,34,)" | python3 -m bnf tuple.bnf
+echo -n "(12,34,)" | python3 -m ebnf tuple.ebnf
 </pre>
 
 The printed result should be <tt>True</tt> or <tt>False</tt> whether
@@ -109,7 +109,7 @@ the input sequence is accepted by the grammar, or not, respectively.
 
 If the input sequence is store in file (<tt>sequence.txt</tt>), use it as a second argument:
 <pre>
-python3 -m bnf tuple.bnf sequence.txt
+python3 -m ebnf tuple.ebnf sequence.txt
 </pre>
 
 Note: input sequence must not contain a newline (<tt>\n</tt>) if grammar does not support it (use <tt>echo -n</tt>)
@@ -119,7 +119,7 @@ after a first EOF (End-of-file: <tt>ctrl-D</tt> in unix or <tt>ctrl-Z</tt> in wi
 the input sequence:
 <pre>
 prompt$ python3 -m bnf
-<x> ::= a b+ c
+&lt;x&gt; ::= a b+ c
 input sequence: end with EOF (^D) or use ^D^D to end with no EOL
 abbc
 True
@@ -130,7 +130,14 @@ Use the environment <tt>DEBUG=1</tt> for a verbose output
 (<tt>DEBUG=2</tt> for a more verbose output):
 
 <pre>
-echo -n "(12,34,)" | DEBUG=1 python3 -m bnf tuple.bnf
+echo -n "(12,34,)" | DEBUG=1 python3 -m ebnf tuple.ebnf
+</pre>
+
+In interactive mode:
+<pre>
+&gt;&gt;&gt; from bnf import grammar, parse
+&gt;&gt;&gt; grammar("&lt;x&gt; ::= a b+ c\n")
+&gt;&gt;&gt; parse("abbc")
 </pre>
 
 </body>

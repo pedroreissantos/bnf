@@ -49,6 +49,13 @@ Use the environment `DEBUG=1` for a verbose output
 echo -n "(12,34,)" | DEBUG=1 python3 -m bnf tuple.bnf
 ```
 
+In interactive mode:
+```
+>>> from bnf import grammar, parse
+>>> grammar("<tuple> ::= \( <body> \) | \( \)\n<body>  ::= <elem> <num> | <elem>\n<elem>  ::= <num> , <elem> | <num> ,\n<num>   ::= <dig> <num> | <dig>\n<dig>   ::= [0-9]\n")
+>>> parse("(12,34,)")
+```
+
 EBNF syntax:
 ============
 
@@ -71,6 +78,13 @@ Test if an input sequence matches the above grammar with:
 
 ```
 echo -n "(12,34,)" | python3 -m ebnf tuple.ebnf
+```
+
+In interactive mode:
+```
+>>> from ebnf import grammar, parse
+>>> grammar("tuple ::= '(' body ')' | '(' ')' ;body  ::= elem num | elem ;elem  ::= num ',' elem | num ',' ;num   ::= dig num | dig ;dig   ::= [0-9] ;")
+>>> parse("(12,34,)")
 ```
 
 The bnf/ package includes:
