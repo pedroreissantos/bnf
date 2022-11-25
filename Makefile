@@ -1,19 +1,20 @@
 PKG=bnf-pkg-peresan
 ENV=test
 REP=testpypi
+PYTHON=python3
 all::
-	python3 setup.py sdist bdist_wheel
+	$(PYTHON) setup.py sdist bdist_wheel # pip install wheel
 install::
-	python3 -m twine upload --repository $(REP) dist/*
+	$(PYTHON) -m twine upload --repository $(REP) dist/*
 check::
-	python3 -m twine check dist/*
+	$(PYTHON) -m twine check dist/*
 test::
-	python3 -m venv $(ENV)
+	$(PYTHON) -m venv $(ENV)
 	source $(ENV)/bin/activate
 	pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple $(PKG)
 	echo "import package, test and exit"
-	python3
+	$(PYTHON)
 clean::
 	rm -rf __pycache__ *.egg-info/ dist build $(ENV) parser.out  parsetab.py
 lixo::
-	bash -c "python3 -m venv $(ENV); source $(ENV)/bin/activate; pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple $(PKG); echo "import package, test and exit"; python3"
+	bash -c "$(PYTHON) -m venv $(ENV); source $(ENV)/bin/activate; pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple $(PKG); echo "import package, test and exit"; $(PYTHON)"

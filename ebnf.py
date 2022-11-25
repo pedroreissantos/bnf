@@ -146,7 +146,7 @@ def grammar(data):
 	''' parse grammar and start symbol from data '''
 	global gram, start, nerr
 	gram, start, nerr = {}, None, 0
-	yacc.yacc().parse(data, debug=False, tracking=True, lexer=lex.lex())
+	yacc.yacc(debuglog=yacc.NullLogger()).parse(data, debug=False, tracking=True, lexer=lex.lex())
 	if nerr:
 		gram, start = {}, None
 	return gram, start
