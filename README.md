@@ -95,7 +95,7 @@ The bnf/ package includes:
 
 Documentation in the docs/ directory:
 
-* tutorial.html: an introdution guide
+* tutorial.html: an introduction guide
 * internals.html: bnf/ebnf routine description
 
 Code examples:
